@@ -96,7 +96,7 @@
             }
             console.log("hereeeeeeeee")
             localStorage.setItem("user", JSON.stringify(result))
-            window.location.href = "/charts/" + JSON.parse(localStorage.getItem("user"))._id
+            window.location.href = "/main"
         })
             .catch(error => {
                 console.error('Error sending request:', error);
@@ -132,7 +132,7 @@
             localStorage.setItem("user", JSON.stringify(result));
 
 
-            window.location.href = "/charts/" + JSON.parse(localStorage.getItem("user"))._id
+            window.location.href = "/main"
         })
             .catch(error => {
                 console.error('Error sending request:', error);
