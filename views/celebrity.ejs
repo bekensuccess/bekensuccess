@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synonyms and Antonyms</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item actor">
+                    <a class="nav-link" href="/celebrity">Actor</a>
+                </li>
+                <li class="nav-item charts">
+                    <a class="nav-link">Charts</a>
+                </li>
+                <li class="nav-item admin">
+                    <a class="nav-link" href="/admin">Admin</a>
+                </li>
+                <li class="nav-item download" style="cursor: pointer">
+                    <a class="nav-link">PDF Download</a>
+                </li>
+                <li class="nav-item history" style="cursor: pointer">
+                    <a class="nav-link">History</a>
+                </li>
+                <li class="nav-item quiz" style="cursor: pointer">
+                    <a class="nav-link" href = "/quiz">Quiz</a>
+                </li>
+                <li class="nav-item main" style="cursor: pointer">
+                    <a class="nav-link" href = "/main">Main</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/translate">Translate</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title text-center">Find you actor</h2>
+                </div>
+                <div class="card-body">
+                    <form id="animalForm">
+                        <div class="form-group">
+                            <label for="animalInput">Enter actor:</label>
+                            <input type="text" class="form-control wordName" id="animalInput" placeholder="Enter an animal name" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+            <div id="animalInfo" class="card" style="display: none;">
+                <div class="card-body">
+                    <h4 class="card-title">Find actor</h4>
+                    <p><strong>Name</strong> <span id="scientificName"></span></p>
+                    <p><strong>Net worth</strong> <span id="family"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /*if (JSON.parse(localStorage.getItem("user")).isAdmin == false) {
+        document.querySelector(".admin").remove()
+    }*/
+
+
+    if (JSON.parse(localStorage.getItem("user")).isAdmin == false) {
+        document.querySelector(".admin").remove()
+    }
+    document.querySelector(".charts").addEventListener("click", () => {
+        window.location.href = "/charts/" + JSON.parse(localStorage.getItem("user"))._id
+    })
+    document.querySelector(".download").addEventListener("click", () => {
+        console.log("click")
+        window.location.href = "/pdfdownload/" + JSON.parse(localStorage.getItem("user"))._id
+    })
+    document.querySelector(".history").addEventListener("click", () => {
+        window.location.href = "/history/" + JSON.parse(localStorage.getItem("user"))._id
+    })
+
+    document.querySelector(".btn").addEventListener('click', function(event) {
+        event.preventDefault();
+        var animalName = document.querySelector(".wordName").value.trim();
+
+        fetchAnimalInfo(animalName);
+    });
+    function fetchAnimalInfo(animalName) {
+        fetch('/celebrity?value=' + animalName + "&id=" + JSON.parse(localStorage.getItem("user"))._id)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Celebrity not found!');
+                }
+                return response.json()
+            })
+            .then(data => {
+              displayAnimalInfo(data.celebrity[0])
+            })
+    }
+    function displayAnimalInfo(animalData) {
+        var animalInfoDiv = document.getElementById('animalInfo');
+        var taxonomy = animalData.taxonomy;
+        var characteristics = animalData.characteristics;
+        var locations = animalData.locations;
+
+        animalInfoDiv.style.display = 'block';
+        document.getElementById('scientificName').textContent = animalData.name;
+        document.getElementById('family').textContent = animalData.net_worth;
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

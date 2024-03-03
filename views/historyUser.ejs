@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Table</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item actor">
+                    <a class="nav-link" href="/celebrity">Actor</a>
+                </li>
+                <li class="nav-item charts">
+                    <a class="nav-link">Charts</a>
+                </li>
+                <li class="nav-item admin">
+                    <a class="nav-link" href="/admin">Admin</a>
+                </li>
+                <li class="nav-item download" style="cursor: pointer">
+                    <a class="nav-link">PDF Download</a>
+                </li>
+                <li class="nav-item history" style="cursor: pointer">
+                    <a class="nav-link">History</a>
+                </li>
+                <li class="nav-item quiz" style="cursor: pointer">
+                    <a class="nav-link" href = "/quiz">Quiz</a>
+                </li>
+                <li class="nav-item main" style="cursor: pointer">
+                    <a class="nav-link" href = "/main">Main</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/translate">Translate</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <h1>История Ваших запросов</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Prompt</th>
+            <th scope="col">Type</th>
+            <th scope="col">Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% for (let i = 0; i < userHistory[0].history.length; i++) { %>
+            <tr>
+                <td><%= userHistory[0].username %></td>
+
+
+
+
+
+
+
+                <td><%= userHistory[0].history[i].prompt %></td>
+                <td><%= userHistory[0].history[i].type %></td>
+                <td><%= userHistory[0].history[i].creationDate %></td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div>
+
+<script>
+
+
+
+
+
+
+
+
+    if (JSON.parse(localStorage.getItem("user")).isAdmin == false) {
+        document.querySelector(".admin").remove()
+    }
+    document.querySelector(".charts").addEventListener("click", () => {
+        window.location.href = "/charts/" + JSON.parse(localStorage.getItem("user"))._id
+    })
+    document.querySelector(".download").addEventListener("click", () => {
+        console.log("click")
+        window.location.href = "/pdfdownload/" + JSON.parse(localStorage.getItem("user"))._id
+    })
+    document.querySelector(".history").addEventListener("click", () => {
+        window.location.href = "/history/" + JSON.parse(localStorage.getItem("user"))._id
+    })
+</script>
+
+<!-- Bootstrap JS (optional, if you need JavaScript functionality) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

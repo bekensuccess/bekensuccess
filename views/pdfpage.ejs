@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item actor">
+                    <a class="nav-link" href="/celebrity">Actor</a>
+                </li>
+                <li class="nav-item charts">
+                    <a class="nav-link">Charts</a>
+                </li>
+                <li class="nav-item admin">
+                    <a class="nav-link" href="/admin">Admin</a>
+                </li>
+                <li class="nav-item download" style="cursor: pointer">
+                    <a class="nav-link">PDF Download</a>
+                </li>
+                <li class="nav-item history" style="cursor: pointer">
+                    <a class="nav-link">History</a>
+                </li>
+                <li class="nav-item quiz" style="cursor: pointer">
+                    <a class="nav-link" href = "/quiz">Quiz</a>
+                </li>
+                <li class="nav-item main" style="cursor: pointer">
+                    <a class="nav-link" href = "/main">Main</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/translate">Translate</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container mt-5">
+    <h1 class="mb-4">Admin Page</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Тип</th>
+            <th>Скачать</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Истории запросов</td>
+            <td>
+                <button class="btn btn-primary download-chart" data-type="userHistory">Download</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Список пользователей</td>
+            <td>
+                <button class="btn btn-primary download-chart" data-type="userList">Download</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Графики</td>
+            <td>
+                <button class="btn btn-primary download-chart" data-type="charts">Download</button>
+            </td>
+        </tr>
+            <td>Список историй</td>
+            <td>
+                <button class="btn btn-primary download-chart" data-type="commonData">Download</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if (JSON.parse(localStorage.getItem("user")).isAdmin == false) {
+        document.querySelector(".admin").remove()
+    }
+    document.querySelector(".charts").addEventListener("click", () => {
+        window.location.href = "/charts/" + JSON.parse(localStorage.getItem("user"))._id
+    })
+    document.querySelector(".download").addEventListener("click", () => {
+        console.log("click")
+        window.location.href = "/pdfdownload/" + JSON.parse(localStorage.getItem("user"))._id
+    })
+    document.querySelector(".history").addEventListener("click", () => {
+        window.location.href = "/history/" + JSON.parse(localStorage.getItem("user"))._id
+    })
+    document.querySelectorAll(".download-chart").forEach(button => {
+        button.addEventListener("click", async () => {
+            const type = button.dataset.type;
+            const options = {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            fetch(`/pdfhistory?type=${type}&id=${JSON.parse(localStorage.getItem("user"))._id}`)
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'history.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                })
+        });
+    });
+</script>
+</body>
+</html>
